@@ -1,0 +1,64 @@
+  <!DOCTYPE html>
+  <html>
+    <head>
+      <meta charset="utf-8">
+      <title>Welcome</title>
+    </head>
+
+    <body>
+      <form action="logout" method="post" >
+        {% csrf_token %}
+        <input type="submit" name="" value="Logout">
+      </form>
+      <a href="mostLikes"> Most liked Posts </a>
+      <h1>Welcome {{users.first_name}}</h1>
+      <form action="makePost" method="post">
+        {% csrf_token %}
+        <input type="textfield" name="post">
+        <input type="submit" value="submit">
+      </form>
+
+      <!-- {% for post in posts %}
+      <p><h1>{{post.description}}</h1> {{post.created_at}} <h4> {{post.likes}}</p>
+
+      {% endfor %} -->
+      <table>
+        <thead>
+          <tr>
+            <th>Posts</th>
+          </tr>
+        </thead>
+        {% for post in posts %}
+        <tbody>
+          <tr>
+            <td>
+              {{post.description}}
+            </td>
+            <td>
+              {{post.created_at}}
+            </td>
+              <td>
+                <form action="/likePost" method="post">
+                  {% csrf_token %}
+                  <input type="hidden" value="{{post.id}}" name="postid">
+                  <input type="submit" value="Like">
+                </form>
+              </td>
+            {% if request.session.id == post.created_by.id %}
+              <td>
+                <form action="/deletePost" method="post">
+                  {% csrf_token %}
+                  <input type="hidden" value="{{post.id}}" name="deleteid">
+                  <input type="submit" value="Delete">
+                </form>
+              </td>
+            {% endif %}
+            <td>
+              Likes: {{post.num_likes}}
+            </td>
+          </tr>
+        </tbody>
+        {% endfor %}
+      </table>
+    </body>
+  </html>
